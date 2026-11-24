@@ -1,0 +1,23 @@
+# Entorno IA de edición (Python 3.12, CPU). Instalar con: scripts/setup-ai.sh
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.*
+torchvision==0.*
+onnxruntime>=1.20
+huggingface_hub
+transformers
+av
+opencv-contrib-python-headless
+scenedetect[opencv-headless]
+pillow
+numpy<2.3
+scipy
+scikit-image
+mediapipe
+pytesseract
+soundfile
+librosa
+pyloudnorm
+faster-whisper
+hydra-core
+iopath
+tqdm

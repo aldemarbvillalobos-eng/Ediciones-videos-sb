@@ -14,3 +14,8 @@ salida/*
 !salida/.gitkeep
 public/procesados/*
 !public/procesados/.gitkeep
+# Entorno IA (pesado, se reinstala con scripts/setup-ai.sh)
+.venv-ai/
+ai/models/
+ai/vendor/
+ai/cache/

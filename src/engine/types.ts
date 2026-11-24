@@ -16,7 +16,7 @@ export type Segment = {
 };
 
 export type Overlay =
-  | { type: "lowerThird"; at: number; dur: number; name: string; role?: string; side?: "left" | "right" }
+  | { type: "lowerThird"; at: number; dur: number; name: string; role?: string; side?: "left" | "right"; x?: number; y?: number }
   | { type: "card"; at: number; dur: number; title: string; points?: string[]; icon?: IconName; side?: "left" | "right"; kicker?: string }
   | { type: "chapter"; at: number; dur: number; index?: number; title: string };
 

@@ -60,3 +60,57 @@ No crees otro editor ni otra aplicación. Usa el motor existente (`src/engine`, 
 - Audio y video originales sin reprocesar: copia sin recodificar a `public/procesados/<slug>/original.mp4`.
 - Muestra aprobada pendiente: `dlu2-02-apl-muestra`. Si se aprueba, renderizar `dlu2-02-apl` (completo).
 - DLU2_01_LEC.mp4 (md5 2f85592e…): 83 paquetes H.264 inválidos entre 1192,3 y 1195,0 s (no recuperables) y ningún dato de video después de 1195 s (el audio sigue hasta 1709 s). Queda en espera de una copia íntegra.
+
+## Edición avanzada con IA: sustitución de fondo y rediseño gráfico
+Cuándo se aplica: el cliente autorizó, dentro de la licencia del curso, sustituir el fondo y rediseñar los gráficos conservando a las personas, sus voces, los subtítulos y la autoría. Registro de modelos y licencias: `ai/MODELOS.md`.
+
+### Entorno (reproducible)
+- **Instalación:** `scripts/setup-ai.sh` instala:
+  - paquetes del sistema por apt: tesseract-ocr con español e inglés, imagemagick, libegl1, libgles2 y libgl1;
+  - un entorno Python 3.12 aislado en `.venv-ai/` (con `uv`), a partir de `ai/requirements-ai.txt` (PyTorch CPU);
+  - PaddleOCR y SAM 2;
+  - los modelos, con `ai/download_models.py`.
+- **Diagnóstico:** `.venv-ai/bin/python ai/check_env.py`.
+- **Hardware:** solo CPU (sin CUDA ni MPS). Todo se procesa por tramos y los resultados intermedios se guardan en `ai/cache/<slug>/` (no versionado).
+- **Notas:**
+  - PaddleOCR en CPU necesita `enable_mkldnn=False`.
+  - MediaPipe necesita libEGL.
+  - Al ejecutar Tesseract en paralelo con otros procesos, usa `OMP_THREAD_LIMIT=1`.
+
+### Flujo por video o tramo (comandos)
+1. **Diagnóstico y escenas:**
+   - `.venv-ai/bin/scenedetect -i <video> -o ai/cache/<slug> detect-adaptive list-scenes`.
+   - OCR por segundo: `ai/ocr_scan.py`, que localiza títulos, rótulos, subtítulos y diapositivas.
+2. **Segmentación de la persona:** `ai/matting_rvm.py <video> t0 t1 ai/cache/<slug>/alpha_rvm_r50 resnet50 0.25`. RVM ResNet50 fue el ganador de la comparación de `ai/compare_seg.py`, frente a MobileNetV3, MediaPipe y SAM 2.
+3. **Subtítulos incrustados:**
+   - `OMP_THREAD_LIMIT=1 ai/subs_boxes.py … 6` y luego `ai/subs_events.py` → eventos estables con cajas por línea.
+   - Excluye palabras de rótulos que el OCR fusione con los subtítulos.
+4. **Copia de análisis sin subtítulos:** `ai/preclean_subs.py` (inpainting de las letras). **Imprescindible**: sin ella, RVM corta el cuerpo bajo la franja de subtítulos. RVM se ejecuta sobre esta copia.
+5. **Rótulos o gráficos originales a sustituir:** `ai/preclean_overlay.py` (config con `rect`, `win`, `plate`, `alpha` y `subs`).
+   - Placa de fondo por mediana temporal, solo con píxeles de fondo y fuera de las cajas de subtítulos.
+   - Gráfico sobre el fondo → placa. Gráfico sobre la persona → relleno por convolución normalizada.
+   - Si quedan restos sobre la persona, el rótulo nuevo de Sensation se coloca en **la misma zona y el mismo tramo** (props `x`/`y` del overlay `lowerThird`) para cubrirlos.
+   - `ai/sam2_gate.py` queda como herramienta de apoyo.
+6. **Fondo de estudio:** `ai/make_studio_bg.py <out.npy> cx cy`. Es procedural (sin IA generativa ni problemas de licencia) y su luminancia está ajustada a la del set original. Haz un fondo por ángulo de cámara.
+7. **Composición:** `ai/composite_bg.py <config.json>`. Toma la persona de los píxeles originales y hace:
+   - descontaminación de bordes y envoltura de luz;
+   - reconstrucción de la caja de subtítulos (opacidad real ≈0,18) y repintado del texto original con su alfa;
+   - grano de película;
+   - mezcla con el audio original.
+
+   Salida: `public/procesados/<slug>/fragmento_estudio.mp4`.
+8. **Remotion:** composición con el `Edit` de `src/videos/<slug>-estudio.ts`: intro, rótulo rediseñado, logo y cierre.
+9. **Control de calidad:** `ai/qc_composite.py` mide:
+   - el PSNR de la persona, que debe ser alto: sus píxeles no se modifican;
+   - la estabilidad temporal de la máscara;
+   - el halo;
+   - el OCR de los subtítulos antes y después.
+
+   Revisa además fotogramas ampliados: cabello, manos, la zona del rótulo antiguo y el borde inferior.
+10. **Entregables:** `scripts/entregables-prueba.sh` genera, en `salida/<prueba>/`, el original, el editado, el comparativo y las capturas.
+
+### Reglas
+- No regeneres ni alteres a las personas: nada de intercambio facial ni retoque de apariencia. MediaPipe solo sirve para detección.
+- No uses ProPainter en producción (licencia no comercial). Usa OpenCV o, si hiciera falta, LaMa (Apache-2.0).
+- Confirma visualmente el OCR antes de reescribir nombres o cargos. Conserva el texto exacto del original.
+- No elimines créditos ni avisos de derechos que deban conservarse. Mantén el crédito a John C. Maxwell en la intro y en el cierre.

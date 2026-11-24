@@ -57,7 +57,7 @@ export const EditedVideo: React.FC<{ edit: Edit }> = ({ edit }) => {
         return (
           <Sequence key={`o${i}`} name={`${o.type}: ${"title" in o ? o.title : o.name}`} from={from} durationInFrames={d} layout="none">
             <AbsoluteFill>
-              {o.type === "lowerThird" ? <LowerThird name={o.name} role={o.role} side={o.side} /> : null}
+              {o.type === "lowerThird" ? <LowerThird name={o.name} role={o.role} side={o.side} x={o.x} y={o.y} /> : null}
               {o.type === "card" ? <InfoCard title={o.title} points={o.points} icon={o.icon} side={o.side} kicker={o.kicker} /> : null}
               {o.type === "chapter" ? <ChapterTitle index={o.index} title={o.title} /> : null}
             </AbsoluteFill>

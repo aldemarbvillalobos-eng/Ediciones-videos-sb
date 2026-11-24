@@ -3,6 +3,7 @@ import { EditedVideo } from "./engine/EditedVideo";
 import { buildTimeline } from "./engine/timeline";
 import { plantilla } from "./videos/_plantilla";
 import { dlu202apl, dlu202aplMuestra } from "./videos/dlu2-02-apl";
+import { dlu202aplEstudio } from "./videos/dlu2-02-apl-estudio";
 
 // Registrar cada video editado como un <Composition> dentro de la carpeta "Entregas".
 export const RemotionRoot: React.FC = () => {
@@ -26,6 +27,15 @@ export const RemotionRoot: React.FC = () => {
           height={dlu202apl.height}
           durationInFrames={buildTimeline(dlu202apl).total}
           defaultProps={{ edit: dlu202apl }}
+        />
+        <Composition
+          id="dlu2-02-apl-estudio-prueba"
+          component={EditedVideo}
+          fps={dlu202aplEstudio.fps}
+          width={dlu202aplEstudio.width}
+          height={dlu202aplEstudio.height}
+          durationInFrames={buildTimeline(dlu202aplEstudio).total}
+          defaultProps={{ edit: dlu202aplEstudio }}
         />
       </Folder>
       <Folder name="Pruebas">

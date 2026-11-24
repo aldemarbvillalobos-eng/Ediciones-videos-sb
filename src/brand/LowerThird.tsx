@@ -4,7 +4,8 @@ import { inOut, prog } from "./anim";
 import { useLayout } from "./useLayout";
 
 /** Nombre y cargo del presentador. side: lado libre del encuadre (no cubrir rostro). */
-export const LowerThird: React.FC<{ name: string; role?: string; side?: "left" | "right" }> = ({ name, role, side = "left" }) => {
+/** x/y opcionales: posición exacta en px (p. ej. para cubrir un rótulo original en la misma zona). */
+export const LowerThird: React.FC<{ name: string; role?: string; side?: "left" | "right"; x?: number; y?: number }> = ({ name, role, side = "left", x, y }) => {
   const f = useCurrentFrame();
   const { durationInFrames: d } = useVideoConfig();
   const { u, safeX, vertical, height } = useLayout();
@@ -15,8 +16,8 @@ export const LowerThird: React.FC<{ name: string; role?: string; side?: "left" |
     <div
       style={{
         position: "absolute",
-        [side]: safeX,
-        top: vertical ? height * 0.6 : height * 0.62,
+        [side]: x ?? safeX,
+        top: y ?? (vertical ? height * 0.6 : height * 0.62),
         opacity: o,
         fontFamily,
         display: "flex",
@@ -29,7 +30,7 @@ export const LowerThird: React.FC<{ name: string; role?: string; side?: "left" |
       <div style={{ width: 6 * u, background: C.gold, borderRadius: 3, scale: `1 ${bar}` }} />
       <div
         style={{
-          background: `linear-gradient(90deg, ${C.purple}EE, ${C.purple2}D9)`,
+          background: `linear-gradient(90deg, ${C.purple}, ${C.purple2})`, // opaco: cubre por completo la zona del rótulo original
           padding: `${16 * u}px ${30 * u}px`,
           borderRadius: 10 * u,
           clipPath: `inset(0 ${(1 - bar) * 100}% 0 0)`,
