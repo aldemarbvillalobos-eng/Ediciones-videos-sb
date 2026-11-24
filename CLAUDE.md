@@ -62,8 +62,9 @@ No crees otro editor ni otra aplicación. Usa el motor existente (`src/engine`, 
 - DLU2_01_LEC.mp4 (md5 2f85592e…): 83 paquetes H.264 inválidos entre 1192,3 y 1195,0 s (no recuperables) y ningún dato de video después de 1195 s (el audio sigue hasta 1709 s).
   - **Pedido del cliente:** editar solo la intro (intro de Sensation y logo discreto) y dejar el resto igual. Se entrega `salida/dlu2-01-lec-intro-sb.mp4`:
     - intro de Sensation y fundido de 0,6 s hacia el contenido, que empieza en 12,07 s (la cortinilla original termina en 12,05 s y la primera palabra llega a 12,22 s);
-    - contenido original con el logo hasta 1192,0 s, el último tramo íntegro, con un fundido final de 1 s;
-    - sin fondo nuevo, sin rótulos nuevos y sin cierre de Sensation.
+    - contenido original con el logo hasta 1192,0 s, el último tramo íntegro; ahí termina la imagen que tiene el archivo (el cliente confirmó que es la única copia y pidió dejarla hasta donde llegue);
+    - fundido de 0,6 s al cierre de Sensation, que marca el final;
+    - sin fondo nuevo ni rótulos nuevos.
   - No se simulan imágenes. El tramo dañado y los 8,5 min de solo audio quedan pendientes de una copia íntegra.
   - Script: `public/procesados/dlu2-01-lec/render_lec.sh` (FFmpeg, una pasada).
 

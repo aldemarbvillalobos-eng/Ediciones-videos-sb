@@ -7,6 +7,7 @@ import { dlu202aplEstudio } from "./videos/dlu2-02-apl-estudio";
 import { dlu202aplFinal } from "./videos/dlu2-02-apl-final";
 import { SlideList } from "./brand/SlideList";
 import { Intro } from "./brand/Intro";
+import { Outro } from "./brand/Outro";
 
 // Registrar cada video editado como un <Composition> dentro de la carpeta "Entregas".
 export const RemotionRoot: React.FC = () => {
@@ -67,6 +68,16 @@ export const RemotionRoot: React.FC = () => {
             credit: "Contenido original de John C. Maxwell",
             outFrames: 1,
           }}
+        />
+        {/* Cierre de Sensation que marca el final de DLU2_01_LEC (la imagen del archivo original llega hasta 1192 s). */}
+        <Composition
+          id="dlu2-01-lec-cierre"
+          component={Outro}
+          fps={30}
+          width={1920}
+          height={1080}
+          durationInFrames={138}
+          defaultProps={{ credit: "Desarrolle el líder que está en usted · Contenido original de John C. Maxwell" }}
         />
       </Folder>
       <Folder name="Diapositivas">
