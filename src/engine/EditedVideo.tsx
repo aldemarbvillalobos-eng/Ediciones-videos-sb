@@ -88,7 +88,7 @@ export const EditedVideo: React.FC<{ edit: Edit }> = ({ edit }) => {
 
       {tl.introF ? (
         <Sequence name="Intro" durationInFrames={tl.introF}>
-          <Intro {...(edit.intro || {})} />
+          <Intro {...(edit.intro || {})} outFrames={tl.introTrans} />
         </Sequence>
       ) : null}
       {tl.outroF ? (

@@ -4,7 +4,8 @@ export const buildTimeline = (e: Edit) => {
   const { fps } = e;
   const introF = e.intro === false ? 0 : Math.round(INTRO_S * fps);
   const outroF = e.outro === false ? 0 : Math.round(OUTRO_S * fps);
-  const bodyStart = introF ? introF - OVERLAP_F : 0;
+  const introTrans = e.introTransitionF ?? OVERLAP_F;
+  const bodyStart = introF ? introF - introTrans : 0;
   let cursor = bodyStart;
   const segs = e.segments.map((s) => {
     const trimBefore = Math.round(s.start * fps);
@@ -25,5 +26,5 @@ export const buildTimeline = (e: Edit) => {
     const next = segs.find((s) => s.start >= t);
     return next ? next.from : null;
   };
-  return { introF, outroF, bodyStart, bodyEnd, outroFrom, total, segs, srcToOut };
+  return { introTrans, introF, outroF, bodyStart, bodyEnd, outroFrom, total, segs, srcToOut };
 };

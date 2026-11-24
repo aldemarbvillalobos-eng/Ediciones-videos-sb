@@ -42,6 +42,8 @@ export type Edit = {
   /** tramo de salida (s, tiempo fuente) donde se muestra la marca de agua */
   watermarkRange?: [number, number];
   watermark?: boolean;
+  /** duración (frames) del fundido intro → contenido; por defecto OVERLAP_F */
+  introTransitionF?: number;
   color?: ColorFix;
   music?: { src: string; volume: number; startAt?: number };
   keywords?: string[];

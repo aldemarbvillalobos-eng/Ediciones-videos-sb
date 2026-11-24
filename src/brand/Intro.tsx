@@ -4,11 +4,11 @@ import { inOut, prog } from "./anim";
 import { useLayout } from "./useLayout";
 
 /** Introducción corporativa breve (~3 s). Título opcional del video. */
-export const Intro: React.FC<{ title?: string; subtitle?: string; kicker?: string; credit?: string }> = ({ title, subtitle, kicker, credit }) => {
+export const Intro: React.FC<{ title?: string; subtitle?: string; kicker?: string; credit?: string; outFrames?: number }> = ({ title, subtitle, kicker, credit, outFrames = 14 }) => {
   const f = useCurrentFrame();
   const { durationInFrames: d } = useVideoConfig();
   const { u, vertical } = useLayout();
-  const o = inOut(f, d, 1, 14);
+  const o = inOut(f, d, 1, outFrames);
   const line = prog(f, 8, 30);
   const logo = prog(f, 4, 26);
   const txt = prog(f, 18, 40);

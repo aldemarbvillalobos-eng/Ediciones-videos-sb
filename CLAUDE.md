@@ -51,6 +51,12 @@ No crees otro editor ni otra aplicación. Usa el motor existente (`src/engine`, 
 - El material tiene licencia para añadir la marca y para editarlo. Ya viene producido de forma profesional: audio en inglés con subtítulos en español incrustados.
 - Se hace **adaptación corporativa**: intro premium (curso, lección y crédito "Contenido original de John C. Maxwell"), logo discreto arriba a la derecha solo entre las cortinillas originales (`watermarkRange`) y cierre con sensationacademy.net y "Aprende. Crece. Brilla.".
 - Prohibido: subtítulos nuevos, gráficos o animaciones sobre los gráficos originales, cortes que alteren el contenido y simular o tapar imágenes dañadas. Se mantienen 1920×1080 a 30 fps.
+- **Intro original:** si la licencia permite sustituirla, se elimina y solo queda la intro de Sensation Academy (nunca dos intros seguidas). El punto de inicio se fija analizando el original:
+  - el fin del título o el fundido a negro (`signalstats` YAVG por fotograma);
+  - el fin de la música de la intro (`astats` RMS);
+  - la primera palabra (`silences.txt`).
+
+  Empieza después de la música y del título y unos 0,7 s antes de la primera palabra, sin cortar contenido. Usa un fundido cruzado `introTransitionF: 20` hacia el contenido. Documenta los tiempos en `src/videos/<slug>.ts`.
 - Audio y video originales sin reprocesar: copia sin recodificar a `public/procesados/<slug>/original.mp4`.
 - Muestra aprobada pendiente: `dlu2-02-apl-muestra`. Si se aprueba, renderizar `dlu2-02-apl` (completo).
 - DLU2_01_LEC.mp4 (md5 2f85592e…): 83 paquetes H.264 inválidos entre 1192,3 y 1195,0 s (no recuperables) y ningún dato de video después de 1195 s (el audio sigue hasta 1709 s). Queda en espera de una copia íntegra.
