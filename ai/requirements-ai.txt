@@ -21,3 +21,5 @@ faster-whisper
 hydra-core
 iopath
 tqdm
+fonttools
+brotli

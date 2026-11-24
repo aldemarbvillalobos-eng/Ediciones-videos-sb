@@ -11,4 +11,6 @@ VIRTUAL_ENV=.venv-ai uv pip install -q paddlepaddle paddleocr || echo "AVISO: Pa
 VIRTUAL_ENV=.venv-ai uv pip install -q --no-deps "git+https://github.com/facebookresearch/sam2.git" || echo "AVISO: SAM2 no se pudo instalar"
 # 3) Modelos
 .venv-ai/bin/python ai/download_models.py
+# 4) Jost en TTF para rótulos de los comparativos (ffmpeg drawtext)
+mkdir -p ai/cache && .venv-ai/bin/python -c "from fontTools.ttLib import TTFont; f=TTFont('public/brand/fonts/Jost-latin.woff2'); f.flavor=None; f.save('ai/cache/Jost.ttf')"
 echo "Entorno IA listo. Diagnóstico: .venv-ai/bin/python ai/check_env.py"
