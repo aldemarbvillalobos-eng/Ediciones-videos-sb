@@ -8,7 +8,8 @@ La persona (rostro, cabello, manos, ropa) se toma siempre de los píxeles ORIGIN
 Uso: composite_bg.py <config.json>"""
 import sys, json, os, subprocess, av, numpy as np, cv2
 cfg = json.load(open(sys.argv[1])); src = cfg["src"]; t0, t1 = cfg["t0"], cfg["t1"]
-bg = np.load(cfg["bg"]).astype(np.float32); H, W = bg.shape[:2]
+bg_default = np.load(cfg["bg"]).astype(np.float32); H, W = bg_default.shape[:2]
+bg_ranges = [(int(a), int(b), np.load(p).astype(np.float32)) for a, b, p in cfg.get("bgRanges", [])]  # [frame_ini, frame_fin, fondo.npy] por plano
 subs = {int(k): v for k, v in json.load(open(cfg["subs"])).items()} if cfg.get("subs") else {}
 subs_keys = np.array(sorted(subs)) if subs else np.array([])
 LT = cfg.get("lowerThird")  # {"t0","t1","rect":[x0,y0,x1,y1]}
@@ -29,6 +30,7 @@ for fr in c.decode(s):
     if t < t0 - 1e-3: continue
     if t > t1 + 1e-3: break
     I = fr.to_ndarray(format="rgb24").astype(np.float32) / 255
+    bg = next((b_ for a_, z_, b_ in bg_ranges if a_ <= idx <= z_), bg_default)
     a = cv2.imread(os.path.join(cfg["alpha"], f"alpha_{idx:05d}.png"), 0).astype(np.float32) / 255
     L = I.mean(2); sat = I.max(2) - I.min(2)
     # 1) Rótulo original: sus píxeles gráficos (texto blanco, líneas azules y el contorno conocido de la caja)

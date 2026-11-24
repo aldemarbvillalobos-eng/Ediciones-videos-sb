@@ -7,8 +7,9 @@ excl = [w.upper() for w in sys.argv[5:]]
 def clean(lines):
     ok = []
     for x0, y0, x1, y1, t in lines:
-        words = re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñü«»3]{3,}", t)
-        if y0 < 875 or y1 > 1025 or (x1 - x0) < 150 or len(words) < 2 or any(e in t.upper() for e in excl): continue
+        letters = len(re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñü]", t)); words = re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñü«»3]{2,}", t)
+        # líneas cortas válidas ("¿Y tú?", "en consecuencia.") incluidas; ruido del OCR (letras sueltas) excluido
+        if y0 < 875 or y1 > 1025 or (x1 - x0) < 60 or letters < 3 or len(words) < 1 or any(e in t.upper() for e in excl): continue
         ok.append([x0, y0, x1, y1, t])
     return sorted(ok, key=lambda r: r[1])
 ks = sorted(d); samples = [(k, clean(d[k])) for k in ks]

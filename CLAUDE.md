@@ -114,3 +114,24 @@ Cuándo se aplica: el cliente autorizó, dentro de la licencia del curso, sustit
 - No uses ProPainter en producción (licencia no comercial). Usa OpenCV o, si hiciera falta, LaMa (Apache-2.0).
 - Confirma visualmente el OCR antes de reescribir nombres o cargos. Conserva el texto exacto del original.
 - No elimines créditos ni avisos de derechos que deban conservarse. Mantén el crédito a John C. Maxwell en la intro y en el cierre.
+
+### Video completo: estilo aprobado y estándar para todos los videos del curso
+**Aprobado por el cliente (nov. 2026)**:
+- fondo de estudio morado con paneles desenfocados, tiras LED doradas y luces cálidas;
+- rótulos en Jost con fondo morado y línea dorada;
+- diapositivas reconstruidas;
+- intro y cierre de Sensation.
+
+No cambies este diseño ni experimentes con estilos nuevos sin autorización. Con cada video nuevo en `originales/` el proceso es:
+1. **Integridad:** `ffprobe` (duraciones de video y audio), decodificación completa (`ffmpeg -v error -f null`) y validación de paquetes si hay errores. Si el archivo está dañado, informa y no ocultes el daño.
+2. **Estructura:** mide brillo y diferencia por fotograma para detectar cortes, destellos y cambios de plano. Mide los tiempos de aparición de cada línea de diapositiva por fotograma, después de los destellos.
+3. **Subtítulos:** `subs_boxes.py` (cada 3 frames) y luego `subs_events.py`. El filtro acepta líneas cortas como "¿Y tú?" o "en consecuencia.". Excluye las palabras de los rótulos.
+4. **Índices de fotograma:** algunos MP4 originales empiezan con `start_time` > 0 (DLU2_02_APL: 0,066 s, es decir, 2 frames). Las copias de trabajo usan **ordinal** (n/fps). Convierte los eventos del OCR (índice por pts) a ordinal antes de usarlos sobre las copias (`*_ord.json`). El audio con `ffmpeg -ss T` sobre el original queda alineado con el ordinal (verificado).
+5. **Persona:** `preclean_overlay.py` (rótulos) → `preclean_subs.py` (copia de análisis) → `matting_rvm.py` por plano → `composite_bg.py` con `bgRanges` por plano. Fondo del primer plano: `ai/bg_variant.py` (mismo set, zoom ≈1,45 y más desenfoque).
+6. **Diapositivas:** `src/brand/SlideList.tsx`, con el texto exacto y los tiempos medidos (composiciones en la carpeta "Diapositivas" de `Root.tsx`). Se renderizan sin audio en `ai/cache/<slug>/`.
+7. **Máster:** `ai/assemble_master.py`. Mantiene la línea de tiempo exacta del original y hace:
+   - sustituye los destellos originales por fundidos con un destello dorado suave;
+   - repinta los subtítulos originales (texto y caja, desde el fotograma más limpio de cada subtítulo) sobre las diapositivas y transiciones;
+   - usa el audio original, con un fundido de salida de 1 s.
+8. **Intro y cierre:** la intro original se sustituye por la de Sensation y el cierre original (cortinillas del curso) se elimina. La autoría queda en la intro y el cierre de Sensation: «Contenido original de John C. Maxwell».
+9. **Render:** `scripts/render.sh <id>` y después QC: `ai/qc_composite.py` por tramo y revisión de fotogramas en cada plano, diapositiva y transición.
