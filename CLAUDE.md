@@ -59,7 +59,13 @@ No crees otro editor ni otra aplicación. Usa el motor existente (`src/engine`, 
   Empieza después de la música y del título y unos 0,7 s antes de la primera palabra, sin cortar contenido. Usa un fundido cruzado `introTransitionF: 20` hacia el contenido. Documenta los tiempos en `src/videos/<slug>.ts`.
 - Audio y video originales sin reprocesar: copia sin recodificar a `public/procesados/<slug>/original.mp4`.
 - Muestra aprobada pendiente: `dlu2-02-apl-muestra`. Si se aprueba, renderizar `dlu2-02-apl` (completo).
-- DLU2_01_LEC.mp4 (md5 2f85592e…): 83 paquetes H.264 inválidos entre 1192,3 y 1195,0 s (no recuperables) y ningún dato de video después de 1195 s (el audio sigue hasta 1709 s). Queda en espera de una copia íntegra.
+- DLU2_01_LEC.mp4 (md5 2f85592e…): 83 paquetes H.264 inválidos entre 1192,3 y 1195,0 s (no recuperables) y ningún dato de video después de 1195 s (el audio sigue hasta 1709 s).
+  - **Pedido del cliente:** editar solo la intro (intro de Sensation y logo discreto) y dejar el resto igual. Se entrega `salida/dlu2-01-lec-intro-sb.mp4`:
+    - intro de Sensation y fundido de 0,6 s hacia el contenido, que empieza en 12,07 s (la cortinilla original termina en 12,05 s y la primera palabra llega a 12,22 s);
+    - contenido original con el logo hasta 1192,0 s, el último tramo íntegro, con un fundido final de 1 s;
+    - sin fondo nuevo, sin rótulos nuevos y sin cierre de Sensation.
+  - No se simulan imágenes. El tramo dañado y los 8,5 min de solo audio quedan pendientes de una copia íntegra.
+  - Script: `public/procesados/dlu2-01-lec/render_lec.sh` (FFmpeg, una pasada).
 
 ## Edición avanzada con IA: sustitución de fondo y rediseño gráfico
 Cuándo se aplica: el cliente autorizó, dentro de la licencia del curso, sustituir el fondo y rediseñar los gráficos conservando a las personas, sus voces, los subtítulos y la autoría. Registro de modelos y licencias: `ai/MODELOS.md`.
