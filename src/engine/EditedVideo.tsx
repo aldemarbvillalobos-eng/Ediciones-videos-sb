@@ -66,7 +66,14 @@ export const EditedVideo: React.FC<{ edit: Edit }> = ({ edit }) => {
       })}
 
       {edit.watermark !== false ? (
-        <Sequence name="Marca de agua" from={tl.bodyStart + 20} durationInFrames={tl.outroFrom - tl.bodyStart - 20}>
+        <Sequence
+          name="Marca de agua"
+          from={edit.watermarkRange ? tl.srcToOut(edit.watermarkRange[0]) ?? tl.bodyStart + 20 : tl.bodyStart + 20}
+          durationInFrames={
+            (edit.watermarkRange ? Math.min(tl.srcToOut(edit.watermarkRange[1]) ?? tl.outroFrom, tl.outroFrom) : tl.outroFrom) -
+            (edit.watermarkRange ? tl.srcToOut(edit.watermarkRange[0]) ?? tl.bodyStart + 20 : tl.bodyStart + 20)
+          }
+        >
           <Watermark />
         </Sequence>
       ) : null}

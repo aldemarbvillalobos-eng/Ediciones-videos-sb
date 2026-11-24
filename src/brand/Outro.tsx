@@ -4,7 +4,7 @@ import { inOut, prog } from "./anim";
 import { useLayout } from "./useLayout";
 
 /** Cierre corporativo (~4.5 s). */
-export const Outro: React.FC<{ cta?: string }> = ({ cta }) => {
+export const Outro: React.FC<{ cta?: string; credit?: string }> = ({ cta, credit }) => {
   const f = useCurrentFrame();
   const { durationInFrames: d } = useVideoConfig();
   const { u, vertical } = useLayout();
@@ -42,6 +42,7 @@ export const Outro: React.FC<{ cta?: string }> = ({ cta }) => {
         >
           {SITE}
         </div>
+        {credit ? <div style={{ opacity: c * 0.7, fontSize: 22 * u, fontWeight: 300, marginTop: 10 * u }}>{credit}</div> : null}
       </div>
     </AbsoluteFill>
   );

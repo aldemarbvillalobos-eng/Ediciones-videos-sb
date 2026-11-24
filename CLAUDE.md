@@ -46,3 +46,11 @@ No crees otro editor ni otra aplicación. Usa el motor existente (`src/engine`, 
 - `originales/`, `salida/`, `public/procesados/` y `whisper.cpp/` no se versionan (archivos pesados).
 - Rendimiento: unos 5 s de render por cada segundo de video (4 CPU). Los renders largos se lanzan en segundo plano.
 - Comprobación de tipos: `npx tsc --noEmit`.
+
+## Curso "Desarrolle el líder que está en usted" (John C. Maxwell) — decisiones del cliente
+- El material tiene licencia para añadir la marca y para editarlo. Ya viene producido de forma profesional: audio en inglés con subtítulos en español incrustados.
+- Se hace **adaptación corporativa**: intro premium (curso, lección y crédito "Contenido original de John C. Maxwell"), logo discreto arriba a la derecha solo entre las cortinillas originales (`watermarkRange`) y cierre con sensationacademy.net y "Aprende. Crece. Brilla.".
+- Prohibido: subtítulos nuevos, gráficos o animaciones sobre los gráficos originales, cortes que alteren el contenido y simular o tapar imágenes dañadas. Se mantienen 1920×1080 a 30 fps.
+- Audio y video originales sin reprocesar: copia sin recodificar a `public/procesados/<slug>/original.mp4`.
+- Muestra aprobada pendiente: `dlu2-02-apl-muestra`. Si se aprueba, renderizar `dlu2-02-apl` (completo).
+- DLU2_01_LEC.mp4 (md5 2f85592e…): 83 paquetes H.264 inválidos entre 1192,3 y 1195,0 s (no recuperables) y ningún dato de video después de 1195 s (el audio sigue hasta 1709 s). Queda en espera de una copia íntegra.

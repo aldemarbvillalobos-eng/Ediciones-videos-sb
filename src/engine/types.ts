@@ -37,8 +37,10 @@ export type Edit = {
   fps: number;
   width: number;
   height: number;
-  intro?: { title?: string; subtitle?: string } | false;
-  outro?: { cta?: string } | false;
+  intro?: { title?: string; subtitle?: string; kicker?: string; credit?: string } | false;
+  outro?: { cta?: string; credit?: string } | false;
+  /** tramo de salida (s, tiempo fuente) donde se muestra la marca de agua */
+  watermarkRange?: [number, number];
   watermark?: boolean;
   color?: ColorFix;
   music?: { src: string; volume: number; startAt?: number };
@@ -49,6 +51,6 @@ export type Edit = {
   captions: Caption[];
 };
 
-export const INTRO_S = 3.2;
+export const INTRO_S = 4.4;
 export const OUTRO_S = 4.6;
 export const OVERLAP_F = 12;

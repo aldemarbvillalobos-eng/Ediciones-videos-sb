@@ -4,7 +4,7 @@ import { inOut, prog } from "./anim";
 import { useLayout } from "./useLayout";
 
 /** Introducción corporativa breve (~3 s). Título opcional del video. */
-export const Intro: React.FC<{ title?: string; subtitle?: string }> = ({ title, subtitle }) => {
+export const Intro: React.FC<{ title?: string; subtitle?: string; kicker?: string; credit?: string }> = ({ title, subtitle, kicker, credit }) => {
   const f = useCurrentFrame();
   const { durationInFrames: d } = useVideoConfig();
   const { u, vertical } = useLayout();
@@ -27,11 +27,11 @@ export const Intro: React.FC<{ title?: string; subtitle?: string }> = ({ title, 
       <AbsoluteFill style={{ opacity: 0.12 * logo }}>
         <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
           {[18, 28, 38, 48].map((r) => (
-            <circle key={r} cx="50" cy="45" r={r * (0.9 + 0.1 * logo)} fill="none" stroke={C.beige} strokeWidth={0.15} />
+            <circle key={r} cx="50" cy="45" r={r * (0.9 + 0.1 * logo + 0.08 * (f / d))} fill="none" stroke={C.beige} strokeWidth={0.15} />
           ))}
         </svg>
       </AbsoluteFill>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 28 * u }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 28 * u, scale: `${1 + 0.025 * (f / d)}` }}>
         <Img
           src={staticFile("brand/logo-sensation-blanco.png")}
           style={{ width: (vertical ? 620 : 560) * u, opacity: logo, translate: `0 ${(1 - logo) * 30 * u}px`, filter: `blur(${(1 - logo) * 8}px)` }}
@@ -42,8 +42,10 @@ export const Intro: React.FC<{ title?: string; subtitle?: string }> = ({ title, 
         </div>
         {title ? (
           <div style={{ opacity: txt, translate: `0 ${(1 - txt) * 20 * u}px`, textAlign: "center", maxWidth: (vertical ? 900 : 1400) * u }}>
+            {kicker ? <div style={{ fontSize: 24 * u, fontWeight: 500, letterSpacing: 5 * u, textTransform: "uppercase", color: C.beige, marginTop: 10 * u }}>{kicker}</div> : null}
             <div style={{ fontSize: (vertical ? 64 : 60) * u, fontWeight: 600, lineHeight: 1.1, marginTop: 14 * u }}>{title}</div>
-            {subtitle ? <div style={{ fontSize: 30 * u, fontWeight: 300, marginTop: 12 * u, opacity: 0.85 }}>{subtitle}</div> : null}
+            {subtitle ? <div style={{ fontSize: 32 * u, fontWeight: 400, marginTop: 14 * u, opacity: 0.92 }}>{subtitle}</div> : null}
+            {credit ? <div style={{ fontSize: 24 * u, fontWeight: 300, marginTop: 26 * u, opacity: 0.75, letterSpacing: 1 * u }}>{credit}</div> : null}
           </div>
         ) : (
           <div style={{ fontSize: 26 * u, fontWeight: 300, opacity: txt * 0.85, letterSpacing: 2 * u }}>{TAGLINE}</div>
