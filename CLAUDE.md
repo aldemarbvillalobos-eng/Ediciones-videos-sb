@@ -118,6 +118,14 @@ Cuándo se aplica: el cliente autorizó, dentro de la licencia del curso, sustit
 
 ### Reglas
 - No regeneres ni alteres a las personas: nada de intercambio facial ni retoque de apariencia. MediaPipe solo sirve para detección.
+  - **Excepción autorizada por el cliente (nov. 2026), solo para DLU2_02_APL:** prueba de **presentadora virtual**. La cabeza de la presentadora se sustituye por la de una mujer **inexistente**, generada con RealVisXL, y se anima con la actuación original mediante LivePortrait con MediaPipe.
+  - **Se conservan:** voz, subtítulos, cuerpo, escenario, intro, diapositivas y cierre.
+  - **Transparencia obligatoria:**
+    - aviso "Adaptación audiovisual con IA";
+    - rótulo "PRESENTADORA VIRTUAL · IA · VOZ Y ACTUACIÓN ORIGINALES: TRACI MORROW";
+    - crédito a John C. Maxwell.
+  - **Scripts:** `ai/gen_portrait.py`, `ai/lp_reenact.py` (`LP_SCALE=2.0`, `LP_VY=-0.08`) y `ai/lp_composite.py`. Cadena de la prueba: `ai/cache/presentadora_ia/run_ia.sh`.
+  - **Pendiente:** que el cliente confirme los derechos de la voz y la actuación de Traci Morrow antes de publicar. No se aplica a otros videos sin autorización.
 - No uses ProPainter en producción (licencia no comercial). Usa OpenCV o, si hiciera falta, LaMa (Apache-2.0).
 - Confirma visualmente el OCR antes de reescribir nombres o cargos. Conserva el texto exacto del original.
 - No elimines créditos ni avisos de derechos que deban conservarse. Mantén el crédito a John C. Maxwell en la intro y en el cierre.

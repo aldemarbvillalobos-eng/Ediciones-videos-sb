@@ -5,6 +5,7 @@ import { plantilla } from "./videos/_plantilla";
 import { dlu202apl, dlu202aplMuestra } from "./videos/dlu2-02-apl";
 import { dlu202aplEstudio } from "./videos/dlu2-02-apl-estudio";
 import { dlu202aplFinal } from "./videos/dlu2-02-apl-final";
+import { dlu202aplIaMuestra } from "./videos/dlu2-02-apl-ia-muestra";
 import { SlideList } from "./brand/SlideList";
 import { Intro } from "./brand/Intro";
 import { Outro } from "./brand/Outro";
@@ -14,6 +15,15 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Folder name="Entregas">
+        <Composition
+          id="dlu2-02-apl-ia-muestra"
+          component={EditedVideo}
+          fps={dlu202aplIaMuestra.fps}
+          width={dlu202aplIaMuestra.width}
+          height={dlu202aplIaMuestra.height}
+          durationInFrames={buildTimeline(dlu202aplIaMuestra).total}
+          defaultProps={{ edit: dlu202aplIaMuestra }}
+        />
         <Composition
           id="dlu2-02-apl-final"
           component={EditedVideo}

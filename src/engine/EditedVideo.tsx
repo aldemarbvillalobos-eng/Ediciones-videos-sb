@@ -9,6 +9,7 @@ import { Intro } from "../brand/Intro";
 import { LowerThird } from "../brand/LowerThird";
 import { Outro } from "../brand/Outro";
 import { Watermark } from "../brand/Watermark";
+import { AiBadge } from "../brand/AiBadge";
 import { C } from "../brand/tokens";
 import { buildTimeline } from "./timeline";
 import { Edit, Segment } from "./types";
@@ -55,11 +56,12 @@ export const EditedVideo: React.FC<{ edit: Edit }> = ({ edit }) => {
         if (from === null) return null;
         const d = Math.round(o.dur * fps);
         return (
-          <Sequence key={`o${i}`} name={`${o.type}: ${"title" in o ? o.title : o.name}`} from={from} durationInFrames={d} layout="none">
+          <Sequence key={`o${i}`} name={`${o.type}: ${"title" in o ? o.title : "name" in o ? o.name : o.text}`} from={from} durationInFrames={d} layout="none">
             <AbsoluteFill>
               {o.type === "lowerThird" ? <LowerThird name={o.name} role={o.role} side={o.side} x={o.x} y={o.y} /> : null}
               {o.type === "card" ? <InfoCard title={o.title} points={o.points} icon={o.icon} side={o.side} kicker={o.kicker} /> : null}
               {o.type === "chapter" ? <ChapterTitle index={o.index} title={o.title} /> : null}
+              {o.type === "badge" ? <AiBadge text={o.text} /> : null}
             </AbsoluteFill>
           </Sequence>
         );

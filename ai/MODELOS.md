@@ -22,3 +22,13 @@ Los modelos se guardan en `ai/models/` y el código de terceros en `ai/vendor/`.
 ## Notas de licencia
 - **RVM es GPL-3.0.** Se usa como herramienta interna para procesar los videos; los videos resultantes no quedan sujetos a la GPL. Si alguna vez se distribuye el código de RVM, modificado o no, hay que cumplir la GPL-3.0.
 - Ningún modelo se sube a GitHub (`.gitignore`: `ai/models/`, `ai/vendor/`, `.venv-ai/`).
+
+## Presentadora virtual (prueba en DLU2_02_APL, nov. 2026)
+| Modelo | Versión / archivo | Fuente oficial | Licencia | Tamaño | Memoria aprox. | CPU / GPU | Prueba | Uso |
+|---|---|---|---|---|---|---|---|---|
+| RealVisXL V4.0 (SDXL) | fp16, `ai/models/sdxl/RealVisXL_V4.0` | huggingface.co/SG161222/RealVisXL_V4.0 | CreativeML **OpenRAIL++-M** (permite uso comercial, con las restricciones de uso de la licencia) | 6,5 GB | ~9 GB en bf16 | CPU ✔ (bf16 con AMX), ≈6–10 min por imagen de 896×1088 | ✔ 3 retratos; elegido seed 23 | Retrato de una persona **inexistente** |
+| LivePortrait (humanos) | `liveportrait/base_models/*`, `landmark.onnx`, `stitching_retargeting_module.pth` | huggingface.co/KlingTeam/LivePortrait (antes KwaiVGI) | **MIT** (código y pesos) | 0,6 GB | ~2 GB | CPU ✔ ≈5 s/fotograma (512) | ✔ pose, parpadeo y labios transferidos | Anima la cara nueva con la actuación original |
+| MediaPipe Face Landmarker | `face_landmarker.task` (float16) | storage.googleapis.com/mediapipe-models | Apache-2.0 | 3,6 MB | mínima | CPU ✔ | ✔ 478 puntos por fotograma | Sustituye a InsightFace en el recorte de LivePortrait |
+
+- **No se usa InsightFace** (`buffalo_l`, licencia no comercial). Los modelos de InsightFace del repositorio de LivePortrait no se descargaron.
+- Tampoco se usan Wav2Lip (no comercial), inswapper/roop/FaceFusion (modelos no comerciales) ni SadTalker. La sincronía labial sale de la propia actuación original vía LivePortrait.
