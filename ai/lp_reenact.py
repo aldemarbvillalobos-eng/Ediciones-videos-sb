@@ -94,6 +94,10 @@ print("conductor:", n, "fotogramas", round(time.time() - tic, 1), "s", flush=Tru
 # Referencia de expresión: el fotograma con la boca más cerrada (la expresión del retrato es neutra, boca cerrada)
 oks = [f for f in frames_info if f["ok"]]
 ref = min(oks, key=lambda f: f["mouth"])["n"]; exp_ref = drv_infos[ref]["exp"]
+if os.environ.get("LP_REF_DRV"):  # referencia fija (p. ej. la de la muestra aprobada) para mantener idéntica la interpretación
+    with torch.no_grad():
+        _r = cv2.cvtColor(cv2.imread(os.environ["LP_REF_DRV"]), cv2.COLOR_BGR2RGB)
+        exp_ref = lp.get_kp_info(lp.prepare_source(cv2.resize(_r, (256, 256))))["exp"]
 print("referencia de expresión: fotograma", ref, flush=True)
 
 tic = time.time()
@@ -101,7 +105,16 @@ with torch.no_grad():
     for f in oks:
         d = drv_infos[f["n"]]
         R_d = get_rotation_matrix(d["pitch"], d["yaw"], d["roll"])
-        exp_new = x_s_info["exp"] + (d["exp"] - exp_ref)          # expresión relativa (conserva la identidad nueva)
+        delta = d["exp"] - exp_ref
+        # amplificación SOLO de los puntos de los labios (LivePortrait: 6, 12, 14, 17, 19, 20) para no amortiguar la vocalización
+        lip_gain = float(os.environ.get("LP_LIP_GAIN", "1.0"))
+        if lip_gain != 1.0:
+            delta = delta.clone(); delta[:, [6, 12, 14, 17, 19, 20], :] *= lip_gain
+        exp_new = x_s_info["exp"] + delta          # expresión relativa (conserva la identidad nueva)
+        lip_abs = float(os.environ.get("LP_LIP_ABS", "0"))   # 0–1: forma absoluta de los labios del conductor (fruncido o/u)
+        if lip_abs > 0:
+            L = [6, 12, 14, 17, 19, 20]
+            exp_new = exp_new.clone(); exp_new[:, L, :] = (1 - lip_abs) * exp_new[:, L, :] + lip_abs * d["exp"][:, L, :]
         kp_new = d["scale"] * (x_c_s @ R_d + exp_new) + d["t"]   # pose, escala y posición absolutas del conductor
         kp_new[..., 2] = (d["scale"] * (x_c_s @ R_d + exp_new))[..., 2]
         out_t = lp.warp_decode(f_s, x_s, kp_new)["out"]
