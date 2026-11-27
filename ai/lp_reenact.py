@@ -61,7 +61,7 @@ with torch.no_grad():
     x_c_s = x_s_info["kp"]
 
 # --- Conductor: actuación original (fotogramas del máster de estudio)
-lmk_v = landmarker(True)
+lmk_v = landmarker(True); lmk_i = landmarker(False)
 c = av.open(drv_path); st = c.streams.video[0]; fps = float(st.average_rate)
 frames_info = []; prev5 = None; n = 0; tic = time.time()
 drv_infos = []
@@ -71,6 +71,8 @@ for i, fr in enumerate(c.decode(st)):
     if t > t1 + 1e-6: break
     img = fr.to_ndarray(format="rgb24"); h, w = img.shape[:2]
     res = lmk_v.detect_for_video(mp.Image(image_format=mp.ImageFormat.SRGB, data=img), int(round(t * 1000)))
+    if not res.face_landmarks:  # el seguimiento pierde la cara (p. ej. primer fotograma tras un corte): detección por imagen
+        res = lmk_i.detect(mp.Image(image_format=mp.ImageFormat.SRGB, data=img))
     if not res.face_landmarks:
         frames_info.append({"i": i, "ok": False}); continue
     p5, P = pts5_from(res.face_landmarks[0], w, h)
