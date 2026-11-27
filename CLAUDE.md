@@ -121,9 +121,14 @@ Cuándo se aplica: el cliente autorizó, dentro de la licencia del curso, sustit
   - **Excepción autorizada por el cliente (nov. 2026), solo para DLU2_02_APL:** prueba de **presentadora virtual**. La cabeza de la presentadora se sustituye por la de una mujer **inexistente**, generada con RealVisXL, y se anima con la actuación original mediante LivePortrait con MediaPipe.
   - **Se conservan:** voz, subtítulos, cuerpo, escenario, intro, diapositivas y cierre.
   - **Transparencia obligatoria:**
-    - aviso "Adaptación audiovisual con IA";
-    - rótulo "PRESENTADORA VIRTUAL · IA · VOZ Y ACTUACIÓN ORIGINALES: TRACI MORROW";
+    - aviso "Adaptación audiovisual con IA · Voz original: Traci Morrow";
+    - rótulo "PRESENTADORA VIRTUAL (IA) · SENSATION ACADEMY". **Nunca** se pone el nombre de la presentadora original en el rótulo de la virtual;
     - crédito a John C. Maxwell.
+  - **Integración (v2, ref. del cliente):**
+    - piel nueva igualada a la del cuerpo (transferencia Lab ponderada por piel);
+    - cuello nuevo con la anchura medida del original;
+    - bajo el mentón no se retira el cuello original, el nuevo se superpone (nunca asoma el fondo);
+    - mezcla multibanda en la unión y enfoque suave en primeros planos.
   - **Scripts:** `ai/gen_portrait.py`, `ai/lp_reenact.py` (`LP_SCALE=2.0`, `LP_VY=-0.08`) y `ai/lp_composite.py`. Cadena de la prueba: `ai/cache/presentadora_ia/run_ia.sh`.
   - **Pendiente:** que el cliente confirme los derechos de la voz y la actuación de Traci Morrow antes de publicar. No se aplica a otros videos sin autorización.
 - No uses ProPainter en producción (licencia no comercial). Usa OpenCV o, si hiciera falta, LaMa (Apache-2.0).

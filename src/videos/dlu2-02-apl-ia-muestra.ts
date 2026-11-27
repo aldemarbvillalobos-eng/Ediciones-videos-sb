@@ -13,9 +13,10 @@ export const dlu202aplIaMuestra: Edit = {
   watermark: true,
   segments: [{ start: 0, end: 15.0 }],
   overlays: [
-    { type: "badge", at: 0, dur: 15.0, text: "Adaptación audiovisual con IA" },
-    // Rótulo actualizado: identifica a la presentadora como virtual y acredita la voz y actuación originales.
-    { type: "lowerThird", at: 0.4, dur: 5.0, name: "PRESENTADORA VIRTUAL", role: "IA · VOZ Y ACTUACIÓN ORIGINALES: TRACI MORROW", side: "left", x: 110, y: 640 },
+    // Aviso de IA con el crédito de la voz original (no se atribuye el nombre de la presentadora original a la virtual).
+    { type: "badge", at: 0, dur: 15.0, text: "Adaptación audiovisual con IA · Voz original: Traci Morrow" },
+    // Rótulo: identifica a la presentadora virtual como tal.
+    { type: "lowerThird", at: 0.4, dur: 5.0, name: "PRESENTADORA VIRTUAL (IA)", role: "SENSATION ACADEMY", side: "left", x: 110, y: 640 },
   ],
   captions: [],
 };
