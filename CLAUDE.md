@@ -129,7 +129,14 @@ Cuándo se aplica: el cliente autorizó, dentro de la licencia del curso, sustit
     - cuello nuevo con la anchura medida del original;
     - bajo el mentón no se retira el cuello original, el nuevo se superpone (nunca asoma el fondo);
     - mezcla multibanda en la unión y enfoque suave en primeros planos.
-  - **Scripts:** `ai/gen_portrait.py`, `ai/lp_reenact.py` (`LP_SCALE=2.0`, `LP_VY=-0.08`) y `ai/lp_composite.py`. Cadena de la prueba: `ai/cache/presentadora_ia/run_ia.sh`.
+  - **V3 (vigente):** la animación se genera con `LP_LIP_GAIN=1.2`, `LP_LIP_ABS=0.85` y `LP_REF_DRV=<fotograma con la boca cerrada>`. La composición se hace con `ai/lp_composite_v3.py`, que:
+    - escala la cabeza para alinear el mentón (`ai/gen_landmarks.py`);
+    - deja el cuello original desde la mandíbula;
+    - aplica color Lab local, luz de baja frecuencia y grano igualado;
+    - estabiliza por plano.
+
+    Cadena: `ai/cache/presentadora_ia/run_ia_v3.sh`.
+  - **Scripts:** `ai/gen_portrait.py`, `ai/lp_reenact.py` (`LP_SCALE=2.0`, `LP_VY=-0.08`) y `ai/lp_composite.py` (V2).
   - **Pendiente:** que el cliente confirme los derechos de la voz y la actuación de Traci Morrow antes de publicar. No se aplica a otros videos sin autorización.
 - No uses ProPainter en producción (licencia no comercial). Usa OpenCV o, si hiciera falta, LaMa (Apache-2.0).
 - Confirma visualmente el OCR antes de reescribir nombres o cargos. Conserva el texto exacto del original.
